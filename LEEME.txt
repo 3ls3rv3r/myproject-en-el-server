@@ -1,0 +1,10 @@
+#portabilidad
+modifique settings.py para que use variables de ambiente (ver comentarios ahi)
+y cree env.mau para MI ambiente local
+ENTONCES puedo trabajar en mi compu con
+# . ./env.mau #definir MI ambiente, una vez por shell o lo puedo poner en .bashrc
+# python manage.py runserver
+
+Ademas, me copio la base sqlite del server usando scp
+# scp -i ~/.ssh/gzm us4rio@us4rio.webfactional.com:var/db/myproject.sqlite3 ../var/db
+

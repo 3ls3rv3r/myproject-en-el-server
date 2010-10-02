@@ -1,0 +1,18 @@
+<h1>{{ object.desc }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="/plp/{{ object.id }}/vote/" method="post">
+{% csrf_token %}
+{% for varDef in object.rubro.variablepararubro_set.all %}
+<p>{{ varDef.variableDef.desc }}:<br>
+	{% for varOpt in varDef.variableDef.variableopt_set.all %}
+    <input type="radio" name="v_{{ varDef.id}}" id="v_{{ varDef.id }}_{{ forloop.counter }}" value="{{ varOpt.id }}" />
+    <label for="v_{{ varDef.id }}_{{ forloop.counter }}">{{ varOpt.desc }}</label><br />
+
+	{% endfor %}
+{% endfor %}
+<input type="submit" value="Vote" />
+{% csrf_token %}
+</form>
+
