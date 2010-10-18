@@ -95,6 +95,17 @@ def plp_vote(request, candidato_id):
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
+	#Agregando Captcha!
+    if request.POST:
+        form = CaptchaTestForm(request.POST)
+
+        # Validate the form: the captcha field will automatically 
+        # check the input
+        if form.is_valid():
+            human = True
+    else:
+        form = CaptchaTestForm()
+
     return HttpResponseRedirect(reverse('plp_results', args=(c.id,)))
 
 
