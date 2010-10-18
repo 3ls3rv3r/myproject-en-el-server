@@ -101,5 +101,20 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    'captcha',
  	'myproject.polls',
+)
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'coach.umkt@gmail.com'
+EMAIL_HOST_PASSWORD = 'g4n4pl4t4'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+import logging
+logging.basicConfig(
+    level = logging.DEBUG,
+    format = '%(asctime)s %(levelname)s %(message)s',
+    filename = os.environ.get('HOME') + '/logs/user/django-app.log',
+    filemode = 'w'
 )

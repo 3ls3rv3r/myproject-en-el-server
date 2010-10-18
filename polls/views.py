@@ -4,9 +4,11 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render_to_response
 #from django.views.decorators.csrf import csrf_protect
+# import the logging library
+import logging
 
+# Get an instance of a logger
 
-#def index(request):
 #    latest_poll_list = Poll.objects.all().order_by('-pub_date')[:5]
 #    t = loader.get_template('polls/index.html')
 #    c = Context({
@@ -26,6 +28,40 @@ from django.shortcuts import get_object_or_404, render_to_response
 #    p = get_object_or_404(Poll, pk=poll_id)
 #    return render_to_response('polls/results.html', {'poll': p})
 
+from django import forms
+from captcha.fields import CaptchaField
+from django.shortcuts import render_to_response
+
+class CaptchaTestForm(forms.Form):
+#    myfield = AnyOtherField()
+    captcha = CaptchaField(error_messages= { "invalid": "Se pudrio"})
+
+"""
+# or, as a ModelForm:
+class CaptchaTestModelForm(forms.ModelForm):
+    captcha = CaptchaField()
+    class Meta:
+        model = MyModel
+"""
+
+def s_captcha_simple(request):
+    if request.POST:
+        form = CaptchaTestForm(request.POST)
+
+        # Validate the form: the captcha field will automatically 
+        # check the input
+        if form.is_valid():
+            human = True
+    else:
+        form = CaptchaTestForm()
+
+    return render_to_response('polls/base.html',locals())
+
+def umkt_quiero(request):
+    if request.method == "POST":
+    	logging.debug("FORM_DATA: "+str(request.POST))
+    return HttpResponseRedirect("ofrecen.html")
+#   return HttpResponse("Hola, funciona FORM_DATA: "+str(request.POST))
 
 def vote(request, poll_id):
     p = get_object_or_404(Poll, pk=poll_id)
