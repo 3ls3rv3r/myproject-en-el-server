@@ -104,7 +104,7 @@ def RubroCreate(desc, varDefNames):
 def votoCntForCandidato(candidato):
     vv= dict()
     for optCnt in candidato.votocount_set.all():
-        vv[optCnt.variableOpt.desc]= optCnt.cnt
+        vv[optCnt.variableOpt.variableDef.desc +"/"+ optCnt.variableOpt.desc]= optCnt.cnt
     return vv
  
 

@@ -91,6 +91,30 @@ def plp_detail(request, object_id):
     form = CaptchaTestForm()
     return render_to_response('polls/candidato_detail.html', {'object': p, 'form': form})
 
+def plp_results(request, object_id):
+    try:
+        p = Candidato.objects.get(pk=object_id)
+    except Candidato.DoesNotExist:
+        raise Http404
+
+    categorias= []
+    vx= votoCntForCandidato(p)
+    vmax= 1;
+    for k in vx:
+        vc= vx.get(k)
+        if vmax < vc:
+            vmax= vc
+
+    for varDef in p.rubro.variablepararubro_set.all():
+	opts= []
+	for varOpt in varDef.variableDef.variableopt_set.all(): 
+            vc= vx.get(varDef.variableDef.desc + "/" + varOpt.desc,0)
+            opts.append({ 'desc': varOpt.desc, 'votos': vc , 'width': int(vc*10/vmax) , 'color': 'green'})
+
+        categorias.append({ 'desc': varDef.variableDef.desc, 'opts': opts})
+
+    return render_to_response('polls/candidato_results.html', {'object': p, 'categorias': categorias} )
+
 
 def plp_vote(request, candidato_id):
     c = get_object_or_404(Candidato, pk=candidato_id)
@@ -114,7 +138,7 @@ def plp_vote(request, candidato_id):
                # Always return an HttpResponseRedirect after successfully dealing
                # with POST data. This prevents data from being posted twice if a
                # user hits the Back button.
-            return HttpResponseRedirect(reverse('plp_results', args=(c.id,)))
+            return HttpResponseRedirect(reverse('candidato_results', args=(c.id,)))
         else:
             return plp_detail(request, candidato_id)
 
