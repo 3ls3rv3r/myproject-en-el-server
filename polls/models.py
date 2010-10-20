@@ -102,15 +102,19 @@ def RubroCreate(desc, varDefNames):
     return rubro
 
 def votoCntForCandidato(candidato):
-    vv= {'XOpt1': -1, 'XOpt2': -1, 'XOpt3': -1}
+    vv= dict()
     for optCnt in candidato.votocount_set.all():
         vv[optCnt.variableOpt.desc]= optCnt.cnt
     return vv
  
-@transaction.commit_on_success
+
 def votarDefOptForCandidato(candidato, varDefName, varOptName):
     varDef= candidato.rubro.variablepararubro_set.get(variableDef__desc= varDefName).variableDef
     varOpt= varDef.variableopt_set.get(desc=varOptName)
+    return votarOptForCandidato(candidato, varOpt)
+
+@transaction.commit_on_success
+def votarOptForCandidato(candidato, varOpt):
     try:
         vc= candidato.votocount_set.get(variableOpt= varOpt)
         vc.cnt= vc.cnt+1

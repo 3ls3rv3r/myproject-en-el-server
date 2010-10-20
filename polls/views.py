@@ -109,7 +109,8 @@ def plp_vote(request, candidato_id):
                    #XXX: mostrar cartelito
                    pass
                else:
-                   c.voto_set.create(variableOpt= val)
+                   #A: consegui la variable de la def (no de la web) y busque el valor en la def (no en la web), no preciso mas validaciones
+                   votarOptForCandidato(c,val)
                # Always return an HttpResponseRedirect after successfully dealing
                # with POST data. This prevents data from being posted twice if a
                # user hits the Back button.
