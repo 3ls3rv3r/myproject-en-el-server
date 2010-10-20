@@ -69,3 +69,19 @@ class VotarYContarTest(TestCase):
         except:
             self.fail("Voto por una opcion que No es del rubro y NO recibio DoesNotExist")
 
+    def test_rubro_crear(self):
+        varDef= VariableDefCreate('XCategoriaRubro',['Xopt1','XOpt2','Xopt3'])
+        RubroCreate('XRubroNuevo',['XCategoriaRubro'])
+
+	rr= Rubro.objects.filter(desc='XRubroNuevo')
+        self.failUnlessEqual(len(rr),1)
+
+        varDef= VariableDefCreate('XCategoriaRubro2',['Xopt1','XOpt2','Xopt3'])
+        RubroCreate('XRubroNuevo',['XCategoriaRubro2'])
+
+	rr= Rubro.objects.filter(desc='XRubroNuevo')
+        self.failUnlessEqual(len(rr),1)
+	try:
+	    rr[0].variablepararubro_set.get(variableDef__desc='XCategoriaRubro2')
+        except ObjectDoesNotExist:
+            self.fail("No agrego la categoria al rubro")

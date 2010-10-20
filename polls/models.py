@@ -88,8 +88,12 @@ def VariableDefCreate(desc, opts):
     return varDef
 
 def RubroCreate(desc, varDefNames):
-    rubro= Rubro(desc=desc)
-    rubro.save()
+
+    try: 
+        rubro= Rubro.objects.get(desc=desc)
+    except ObjectDoesNotExist:
+        rubro= Rubro(desc=desc)
+        rubro.save()
 
     for o in varDefNames:
       vardef= VariableDef.objects.get(desc=o)
