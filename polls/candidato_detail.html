@@ -12,10 +12,10 @@
 
 	{% endfor %}
 {% endfor %}
-<form action="s_captcha" method="POST">
+
 {{ form }}
 <input type=submit>
-</form>
+
 {% csrf_token %}
 </form>
 

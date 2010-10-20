@@ -81,21 +81,19 @@ def vote(request, poll_id):
         # user hits the Back button.
     return HttpResponseRedirect(reverse('poll_results', args=(p.id,)))
 
+def plp_detail(request, object_id):
+    #XXX: generalizar, la unica diferencia con la vista generica es crear el captcha form
+    try:
+        p = Candidato.objects.get(pk=object_id)
+    except Candidato.DoesNotExist:
+        raise Http404
+
+    form = CaptchaTestForm()
+    return render_to_response('polls/candidato_detail.html', {'object': p, 'form': form})
+
+
 def plp_vote(request, candidato_id):
     c = get_object_or_404(Candidato, pk=candidato_id)
-    for vpr in c.rubro.variablepararubro_set.all():
-        try:
-            val = vpr.variableDef.variableopt_set.get(pk=request.POST['v_'+str(vpr.id)])
-        except (KeyError, Choice.DoesNotExist):
-            # Redisplay the poll voting form.
-            #XXX: mostrar cartelito
-            pass
-        else:
-            c.voto_set.create(variableOpt= val)
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
-	#Agregando Captcha!
     if request.POST:
         form = CaptchaTestForm(request.POST)
 
@@ -103,9 +101,19 @@ def plp_vote(request, candidato_id):
         # check the input
         if form.is_valid():
             human = True
-    else:
-        form = CaptchaTestForm()
-
-    return HttpResponseRedirect(reverse('plp_results', args=(c.id,)))
-
+            for vpr in c.rubro.variablepararubro_set.all():
+               try:
+                   val = vpr.variableDef.variableopt_set.get(pk=request.POST['v_'+str(vpr.id)])
+               except (KeyError, Choice.DoesNotExist):
+                   # Redisplay the poll voting form.
+                   #XXX: mostrar cartelito
+                   pass
+               else:
+                   c.voto_set.create(variableOpt= val)
+               # Always return an HttpResponseRedirect after successfully dealing
+               # with POST data. This prevents data from being posted twice if a
+               # user hits the Back button.
+            return HttpResponseRedirect(reverse('plp_results', args=(c.id,)))
+        else:
+            return plp_detail(request, candidato_id)
 
