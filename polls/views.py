@@ -81,7 +81,11 @@ def vote(request, poll_id):
         # user hits the Back button.
     return HttpResponseRedirect(reverse('poll_results', args=(p.id,)))
 
-def plp_detail(request, object_id):
+def plp_candidato_list(request, iden):
+	o= IdentificadorCandidato.objects.filter(identificador__desc= iden)
+	return render_to_response('polls/candidato_list.html', {'object_list': o, 'iden': iden})
+
+def plp_candidato_form(request, object_id):
     #XXX: generalizar, la unica diferencia con la vista generica es crear el captcha form
     try:
         p = Candidato.objects.get(pk=object_id)
@@ -89,7 +93,7 @@ def plp_detail(request, object_id):
         raise Http404
 
     form = CaptchaTestForm()
-    return render_to_response('polls/candidato_detail.html', {'object': p, 'form': form})
+    return render_to_response('polls/candidato_form.html', {'object': p, 'form': form})
 
 def plp_results(request, object_id):
     try:
@@ -140,5 +144,5 @@ def plp_vote(request, candidato_id):
                # user hits the Back button.
             return HttpResponseRedirect(reverse('candidato_results', args=(c.id,)))
         else:
-            return plp_detail(request, candidato_id)
+            return plp_candidato_form(request, candidato_id)
 

@@ -96,12 +96,12 @@ class VotarYContarTest(TestCase):
 		c1= Candidato(desc="XCandidato1", rubro=rubro ).save()
 		c2= Candidato(desc="XCandidato2", rubro=rubro ).save()
 		
-		identificadorForCandidatoRegistrar(c1,"4444-4441","telefono")
-		identificadorForCandidatoRegistrar(c2,"4444-4442","telefono")
-		identificadorForCandidatoRegistrar(c2,"4444-4442","telefono")
-		identificadorForCandidatoRegistrar(c2,"candidato2@dominio.com","email")
-		identificadorForCandidatoRegistrar(c2,"spammer@dominio.com","email")
-		identificadorForCandidatoRegistrar(c1,"spammer@dominio.com","email")
+		identificarCandidatoPor(c1,"4444-4441","telefono")
+		identificarCandidatoPor(c2,"4444-4442","telefono")
+		identificarCandidatoPor(c2,"4444-4442","telefono")
+		identificarCandidatoPor(c2,"candidato2@dominio.com","email")
+		identificarCandidatoPor(c2,"spammer@dominio.com","email")
+		identificarCandidatoPor(c1,"spammer@dominio.com","email")
 
 		r1= IdentificadorCandidato.objects.filter(identificador__tipo__desc="telefono", identificador__desc="4444-4441")
 		self.failUnlessEqual(len(r1),1)

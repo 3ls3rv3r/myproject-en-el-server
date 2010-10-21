@@ -1,0 +1,72 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!--[if lt IE 9]>
+<script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
+<![endif]-->
+<link rel="stylesheet" href="http://ponelelospuntos.com.ar/deco2.css" type="text/css" />
+</head>
+<body>
+<div id="containerForIE">
+
+<div id="header">
+	<p id="name">ponele-los-puntos...</p>
+</div>
+
+<div id="content">
+
+<div id="propuesta" class="aladerecha">
+<h1>Para qué?</h1>
+<p><a href="monitor">Protegete</a> en un trato</a>
+<p>Mostrá que <a href="postulate">sos bueno</a>
+<p><a href="elegi">Elegí</a> por referencias
+<p>Son buenos? <a href="vota">Recomendalos</a>
+<p>Te fallaron? <a href="vota">Denuncialos!</a>
+</div>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<div class="votar">
+<h1>{{ object.desc }} (<a href="cat?{{object.rubro.desc}}">{{ object.rubro.desc }}</a>)</h1>
+<p class="id_data">( 
+{% for iden in object.identificadorcandidato_set.all %}
+	{{ iden.identificador.tipo }}:
+	<b>{{ iden.identificador.desc }}</b> |
+{% endfor %}
+)</p>
+
+<form action="/plp/{{ object.id }}/vote/" method="post">
+{% csrf_token %}
+{% for varDef in object.rubro.variablepararubro_set.all %}
+<p class="categoria">{{ varDef.variableDef.desc }}:</p>
+<p>
+	{% for varOpt in varDef.variableDef.variableopt_set.all %}
+    <input type="radio" name="v_{{ varDef.id}}" id="v_{{ varDef.id }}_{{ forloop.counter }}" value="{{ varOpt.id }}" />
+    <label for="v_{{ varDef.id }}_{{ forloop.counter }}">{{ varOpt.desc }}</label><br />
+
+	{% endfor %}
+{% endfor %}
+
+<p class="captcha">{{ form }}</p>
+
+<p><input type="submit" value="Votar" />
+
+{% csrf_token %}
+</form>
+
+</div>
+
+</div>
+
+<div id="clearfooter"></div>
+</div>
+<div id="footer">
+	&copy; <a href="http://www.ponelelospuntos.com.ar">www.ponelelospuntos.com.ar</a> |
+	<a href="quejas.html">Tengo una queja</a> |
+	<a href="mailto:info@daledame.com.ar">info@ponelelospuntos.com.ar</a>
+</div>
+
+</body>
+</html>
+
+

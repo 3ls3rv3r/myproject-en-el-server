@@ -5,6 +5,9 @@ from datetime import datetime
 
 #S: mejoras a models.Model
 class ModelGZM(models.Model):
+	class Meta:
+		abstract= True
+
 	def save(self,**kwargs):
 		# igual, pero devolvemos el objeto para permitir x= MiModelo(initval).save()
 		models.Model.save(self,**kwargs)
@@ -84,7 +87,7 @@ class IdentificadorCandidato(ModelGZM):
 	identificador = models.ForeignKey(Identificador)
 	candidato = models.ForeignKey(Candidato)
 	def __unicode__(self):
-		return identificador.desc + " -> " + candidato.desc
+		return self.identificador.desc + " -> " + self.candidato.desc
 
 class Voto(ModelGZM):
 	"""ej. Juan Plomero tardo 20 min en llegar"""
@@ -149,7 +152,7 @@ def votarOptForCandidato(candidato, varOpt):
 		candidato.votocount_set.create(variableOpt= varOpt, cnt= 1)
 
 @transaction.commit_on_success
-def identificadorForCandidatoRegistrar(candidato, iden, tipo):
+def identificarCandidatoPor(candidato, iden, tipo):
 	"""registra un identificador para un candidato UNA SOLA VEZ"""
 	isNew= False
 
