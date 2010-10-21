@@ -2,7 +2,7 @@
 {% if object_list %}
     <ul>
     {% for o in object_list %}
-        <li><a href="/plp/{{ o.candidato.id }}/">{{ o.candidato.desc }}</a></li>
+        <li><a href="/plp/{{ o.id }}/">{{ o.desc }}</a></li>
     {% endfor %}
     </ul>
 {% else %}

@@ -82,8 +82,13 @@ def vote(request, poll_id):
     return HttpResponseRedirect(reverse('poll_results', args=(p.id,)))
 
 def plp_candidato_list(request, iden):
-	o= IdentificadorCandidato.objects.filter(identificador__desc= iden)
+	o= Candidato.objects.filter(identificadorcandidato__identificador__desc= iden)
 	return render_to_response('polls/candidato_list.html', {'object_list': o, 'iden': iden})
+
+def plp_candidato_list_r(request, rubro_id):
+	o= Candidato.objects.filter(rubro__id=rubro_id)
+	return render_to_response('polls/candidato_list.html', {'object_list': o, 'iden': "rubro "+ Rubro.objects.get(id=rubro_id).desc})
+
 
 def plp_candidato_form(request, object_id):
     #XXX: generalizar, la unica diferencia con la vista generica es crear el captcha form

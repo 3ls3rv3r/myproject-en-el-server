@@ -27,7 +27,7 @@
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
 <div class="votar">
-<h1>{{ object.desc }} (<a href="cat?{{object.rubro.desc}}">{{ object.rubro.desc }}</a>)</h1>
+<h1>{{ object.desc }} (<a href="/plp/r={{object.rubro.id}}">{{ object.rubro.desc }}</a>)</h1>
 <p class="id_data">( 
 {% for iden in object.identificadorcandidato_set.all %}
 	{{ iden.identificador.tipo }}:
