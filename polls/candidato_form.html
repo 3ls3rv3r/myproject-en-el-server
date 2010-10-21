@@ -31,7 +31,7 @@
 <p class="id_data">( 
 {% for iden in object.identificadorcandidato_set.all %}
 	{{ iden.identificador.tipo }}:
-	<b>{{ iden.identificador.desc }}</b> |
+	<b><a href="/plp/q={{ iden.identificador.desc }}">{{ iden.identificador.desc }}</a></b> |
 {% endfor %}
 )</p>
 
