@@ -6,7 +6,7 @@ def categorias(self):
         varDef= VariableDefCreate('asesoramiento',['visita','telefono','video','escrito','nada'])
         varDef= VariableDefCreate('preparacion superficie',['sup. libre de otra pintura','primer','nada'])
         varDef= VariableDefCreate('tarde en conseguirla',['1 dia','1 semana','1 mes'])
-        rubro1= RubroCreate("pintura casco",["duracion","asesoramiento","preparacion superficie","tarde en conseguirla"])
+        rubro1= RubroCreate("XRubro",["duracion","asesoramiento","preparacion superficie","tarde en conseguirla"])
 
         candidato1= Candidato(desc="revesta", rubro= rubro1).save()
         candidato1= Candidato(desc="steelcot", rubro= rubro1).save()
