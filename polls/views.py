@@ -1,4 +1,5 @@
 from myproject.polls.models import *
+from django.core.exceptions import ObjectDoesNotExist
 from django.template import RequestContext, Context, loader
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
@@ -59,7 +60,7 @@ def s_captcha_simple(request):
 
 def umkt_quiero(request):
     if request.method == "POST":
-    	logging.debug("FORM_DATA: "+str(request.POST))
+       logging.debug("FORM_DATA: "+str(request.POST))
     return HttpResponseRedirect("ofrecen.html")
 #   return HttpResponse("Hola, funciona FORM_DATA: "+str(request.POST))
 
@@ -118,14 +119,22 @@ def plp_vote(request, candidato_id):
             human = True
             for vpr in c.rubro.variablepararubro_set.all():
                try:
-                   val = vpr.variableDef.variableopt_set.get(pk=request.POST['v_'+str(vpr.id)])
-               except (KeyError, Choice.DoesNotExist):
+                   if (vpr.variableDef.tipo=="O"):
+                       val = vpr.variableDef.variableopt_set.get(pk=request.POST['v_'+str(vpr.id)])
+                   else:
+                       val = request.POST['v_'+str(vpr.id)]
+
+               except (KeyError, ObjectDoesNotExist):
                    # Redisplay the poll voting form.
                    #XXX: mostrar cartelito
                    pass
                else:
                    #A: consegui la variable de la def (no de la web) y busque el valor en la def (no en la web), no preciso mas validaciones
-                   votarOptForCandidato(c,val)
+                   logging.debug("XXX " + str(vpr.variableDef.desc) + " T="+ vpr.variableDef.tipo)
+                   if (vpr.variableDef.tipo=="O"):
+                       votarOptForCandidato(c,val)
+                   else:
+                       logging.debug("XXX VOTO R "+str(val))
                # Always return an HttpResponseRedirect after successfully dealing
                # with POST data. This prevents data from being posted twice if a
                # user hits the Back button.

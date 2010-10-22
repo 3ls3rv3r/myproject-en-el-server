@@ -40,11 +40,16 @@
 {% for varDef in object.rubro.variablepararubro_set.all %}
 <p class="categoria">{{ varDef.variableDef.desc }}:</p>
 <p>
+	{% if varDef.variableDef.tipo == "O" %}
 	{% for varOpt in varDef.variableDef.variableopt_set.all %}
     <input type="radio" name="v_{{ varDef.id}}" id="v_{{ varDef.id }}_{{ forloop.counter }}" value="{{ varOpt.id }}" />
     <label for="v_{{ varDef.id }}_{{ forloop.counter }}">{{ varOpt.desc }}</label><br />
 
 	{% endfor %}
+	{% else %}{% if varDef.variableDef.tipo == "R" %}
+		<input name="v_{{ varDef.id}}" id="v_{{ varDef.id }}"/>
+	{% endif %}
+	{% endif %}
 {% endfor %}
 
 <p class="captcha">{{ form }}</p>

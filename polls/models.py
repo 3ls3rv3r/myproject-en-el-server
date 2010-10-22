@@ -19,6 +19,10 @@ class VariableDef(ModelGZM):
 	"""ej. cuanto tardo en llegar"""
 	key= models.CharField(max_length=50,primary_key=True)
 	desc = models.CharField(max_length=100)
+	tipo = models.CharField(max_length=1)
+	rangoMin = models.FloatField(blank=True, default=0.0)
+	rangoMax = models.FloatField(blank=True, default=0.0)
+
 	def __unicode__(self):
 		return self.desc
 
@@ -91,12 +95,18 @@ class VotoCount(ModelGZM):
 
 
 #S: metodos comodos
-def VariableDefCreate(key, desc, opts):
-	varDef= VariableDef(key=key,desc=desc)
+def VariableDefCreateWithOpts(key, desc, opts):
+	varDef= VariableDef(key=key,desc=desc,tipo="O")
 	varDef.save()
 
 	for o in opts:
 	  varDef.variableopt_set.create(desc=o)
+
+	return varDef
+
+def VariableDefCreateWithRange(key, desc, rangoMin, rangoMax):
+	varDef= VariableDef(key=key,desc=desc,tipo="R",rangoMin=rangoMin, rangoMax=rangoMax)
+	varDef.save()
 
 	return varDef
 
