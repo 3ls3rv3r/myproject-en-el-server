@@ -13,35 +13,18 @@ class ModelGZM(models.Model):
 		models.Model.save(self,**kwargs)
 		return self
 
-# Create your models here.
-class Poll(ModelGZM):
-	question = models.CharField(max_length=200)
-	pub_date = models.DateTimeField('date published')
-	def __unicode__(self):
-		return self.question
-	def was_published_today(self):
-		return self.pub_date.date() == datetime.date.today()
-
-	was_published_today.short_description = 'Published today?'
-
-class Choice(ModelGZM):
-	poll = models.ForeignKey(Poll)
-	choice = models.CharField(max_length=200)
-	votes = models.IntegerField()
-	def __unicode__(self):
-		return self.choice
-
 #S: Ponele los puntos
 #S: definiciones
 class VariableDef(ModelGZM):
 	"""ej. cuanto tardo en llegar"""
+	key= models.CharField(max_length=50,primary_key=True)
 	desc = models.CharField(max_length=100)
 	def __unicode__(self):
 		return self.desc
 
 	def optionWithDesc(self, desc):
 		"""ej. si self=puntualidad, devolveme la opcion 1h tarde"""
-		return self.variableopt_set.all().filter(desc=desc)[0]
+		return self.variableopt_set.filter(desc=desc)[0]
 
 class VariableOpt(ModelGZM):
 	"""ej. tardo en llegar=20min"""
@@ -52,6 +35,7 @@ class VariableOpt(ModelGZM):
 
 class Rubro(ModelGZM):
 	"""ej. Plomero"""
+	key= models.CharField(max_length=50,primary_key=True)
 	desc = models.CharField(max_length=100)
 	def __unicode__(self):
 		return self.desc
@@ -72,7 +56,7 @@ class Candidato(ModelGZM):
 
 class TipoIdentificador(ModelGZM):
 	"""ej. 15 6242 2222 identifica a Mauricio"""
-	desc = models.CharField(max_length=100)
+	desc = models.CharField(max_length=100,primary_key=True)
 	def __unicode__(self):
 		return self.desc
 
@@ -107,8 +91,8 @@ class VotoCount(ModelGZM):
 
 
 #S: metodos comodos
-def VariableDefCreate(desc, opts):
-	varDef= VariableDef(desc=desc)
+def VariableDefCreate(key, desc, opts):
+	varDef= VariableDef(key=key,desc=desc)
 	varDef.save()
 
 	for o in opts:
@@ -116,19 +100,23 @@ def VariableDefCreate(desc, opts):
 
 	return varDef
 
-def RubroCreate(desc, varDefNames):
+def RubroCreate(key, desc, varDefNames):
 
 	try: 
-		rubro= Rubro.objects.get(desc=desc)
+		rubro= Rubro.objects.get(pk=key)
 	except ObjectDoesNotExist:
-		rubro= Rubro(desc=desc)
+		rubro= Rubro(key=key,desc=desc)
 		rubro.save()
 
 	for o in varDefNames:
-	  vardef= VariableDef.objects.get(desc=o)
+	  vardef= VariableDef.objects.get(key=o)
 	  rubro.variablepararubro_set.create(variableDef= vardef)
 
 	return rubro
+
+def CandidatosCreate(rubro, candidatos):
+	for c in candidatos:
+		Candidato(desc=c,rubro=rubro).save()
 
 def votoCntForCandidato(candidato):
 	vv= dict()

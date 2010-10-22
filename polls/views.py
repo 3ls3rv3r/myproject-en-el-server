@@ -63,31 +63,13 @@ def umkt_quiero(request):
     return HttpResponseRedirect("ofrecen.html")
 #   return HttpResponse("Hola, funciona FORM_DATA: "+str(request.POST))
 
-def vote(request, poll_id):
-    p = get_object_or_404(Poll, pk=poll_id)
-    try:
-        selected_choice = p.choice_set.get(pk=request.POST['choice'])
-    except (KeyError, Choice.DoesNotExist):
-        # Redisplay the poll voting form.
-        return render_to_response('polls/detail.html', {
-            'poll': p,
-            'error_message': "You didn't select a choice.",
-        }, context_instance=RequestContext(request))
-    else:
-        selected_choice.votes += 1
-        selected_choice.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
-    return HttpResponseRedirect(reverse('poll_results', args=(p.id,)))
-
 def plp_candidato_list(request, iden):
 	o= Candidato.objects.filter(identificadorcandidato__identificador__desc= iden)
 	return render_to_response('polls/candidato_list.html', {'object_list': o, 'iden': iden})
 
 def plp_candidato_list_r(request, rubro_id):
-	o= Candidato.objects.filter(rubro__id=rubro_id)
-	return render_to_response('polls/candidato_list.html', {'object_list': o, 'iden': "rubro "+ Rubro.objects.get(id=rubro_id).desc})
+	o= Candidato.objects.filter(rubro__key=rubro_id)
+	return render_to_response('polls/candidato_list.html', {'object_list': o, 'iden': "rubro "+ Rubro.objects.get(key=rubro_id).desc})
 
 
 def plp_candidato_form(request, object_id):
