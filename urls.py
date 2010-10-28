@@ -8,12 +8,13 @@ urlpatterns = patterns('myproject.polls.views',
     (r'^admin/', include(admin.site.urls)),
     (r'^quiero', 'umkt_quiero'),
     (r'^s_captcha', 's_captcha_simple'),
-	(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'validacion/login.html'}),
-        (r'^accounts/profile/$', 'validacion.views.logueado'),
-
-
 )
 
 urlpatterns += patterns('',
     url(r'^captcha/', include('captcha.urls')),
 )
+urlpatterns += patterns('',
+  (r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'validacion/login.html'}),
+        (r'^accounts/profile/$', 'myproject.validacion.views.logueado'),
+)
+
